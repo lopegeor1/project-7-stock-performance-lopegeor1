@@ -6,6 +6,7 @@ This assignment will test the following skills:
 - Making HTTP requests
 - Testing read & write operations to the disk
 - Testing HTTP requests using a mock library
+- Packaging the script using `setup.py`
 
 
 ## Description
@@ -23,7 +24,7 @@ data, a new CSV report will be generated using live market value to indicate
 our current holding performance using the IEX API.
 
 The program will be installable using `pip`, and requires a `setup.py`
-file. When installed, a binary should be added to the Python path which can be
+file. When installed, a binary will be added to the Python path which can be
 invoked from anywhere on the filesystem.
 
 An example interaction with the script looks like this:
@@ -48,22 +49,46 @@ AAPL   | 1000  | 123.56
 AMZN   |  20   | 2001.1
 
 
-The script will iterate over the data provided, and **validate** that the
-symbol is listed on the IEX. An unrecognized symbol should be skipped, but,
-warn the user that they have an unrecognized input.
-
 
 Using the list of symbols from the input CSV, get quotes from IEX to fetch the
 latest price. This can be done in a batch request – meaning, multiple quotes
 can be requested in a single HTTP request. See:
 
-    Docs: https://iextrading.com/developer/docs/#batch-requests
+Docs: https://iextrading.com/developer/docs/#tops
 
-    Example: https://api.iextrading.com/1.0/stock/market/batch?symbols=aapl,fb&types=quote
+#### Example request & response
+Example request: GET the latest quotes for Apple, Facebook & Snapchat:
+
+https://api.iextrading.com/1.0/tops/last?symbols=AAPL,AMZN,SNAP
+
+```json
+[{
+    "symbol": "AAPL",
+        "price": 204.29,
+        "size": 100,
+        "time": 1563307196175
+}, {
+    "symbol": "AMZN",
+        "price": 2008.395,
+        "size": 1,
+        "time": 1563307196058
+}, {
+    "symbol": "SNAP",
+        "price": 15,
+        "size": 100,
+        "time": 1563307196047
+}]
+```
+
 
 Once the latest price is obtained, a series of calculations are made to
 establish the current performance of the portfolio: what the current market
 value is, the gain and loss for each holding and a percentage of change.
+
+If a symbol listed in the input CSV is not found on the exchange, the IEX API
+ignores it. Your script should account for this situation by warning the user
+that the symbol was not found, but continue to process the rest of the valid
+symbols.
 
 
 #### Output file
@@ -71,7 +96,6 @@ value is, the gain and loss for each holding and a percentage of change.
 The expected CSV report will have the following columns
 
 * `symbol`: The stock ticker symbol (i.e. AAPL)
-* `company_name`: The name of the company (i.e. Apple Inc.)
 * `units`: The amount of shares held
 * `cost`: The original cost per share
 * `latest_price`: The latest market price per share
@@ -82,10 +106,10 @@ The expected CSV report will have the following columns
 
 
 ##### Sample output CSV
-symbol  |  company_name  | units | cost     |   latest_price | book_value  |   market_value | gain_loss |   change
-------- | ---------------|-------|----------|----------------|-------------|----------------| ----------|----------
-AAPL    |  Apple Inc.    | 1000  | 123.56   |   156.23       | 12356       |   15623        | 3267      |   0.264
-AMZN    |  Amazon Inc.   | 20    | 2001.1   |   1478.19      | 40022       |   29563        | -10459    |   -0.261
+symbol  | units | cost     |   latest_price | book_value  |   market_value | gain_loss |   change
+------- |-------|----------|----------------|-------------|----------------| ----------|----------
+AAPL    | 1000  | 123.56   |   156.23       | 12356       |   15623        | 3267      |   0.264
+AMZN    | 20    | 2001.1   |   1478.19      | 40022       |   29563        | -10459    |   -0.261
 
 
 ## Getting started
@@ -96,8 +120,6 @@ component in isolation, accompanied by appropriate tests.
 Here is a breakdown of isolated functional units:
 
 - Given a filename, read a CSV and convert it to a Python data structure
-- Fetch the symbol list from the IEX API and into a Python data structure
-- Validate that the symbols listed in the input CSV are listed on IEX.
 - Build a method which returns the latest market price for holdings
 - Build methods which calculate the book value, market value
 - Build a method to convert the holding into CSV
@@ -113,15 +135,16 @@ isolate the dependency and replace it with a constant to which we can build
 tests. For this, we will use the `requests-mock` library to stub out
 HTTP requests.
 
-    https://requests-mock.readthedocs.io/en/latest/pytest.html
+https://requests-mock.readthedocs.io/en/latest/pytest.html
 
 Install using `pip install requests-mock`.
 
 As for writing files, use the `tmp_path` fixture that ships with pytest to
 write to temporary locations on the disk.
 
-**Make sure to update `requirements.txt`** so any testing libraries are
-available to Travis CI.
+**Make sure to update `requirements.txt`** and include any libraries required
+to build this project (e.g. `requests`, `requests-mock`) so they are available
+to Travis CI.
 
 ## Packaging
 
@@ -129,7 +152,6 @@ As described above, provide a `setup.py` configuration to package your
 application. Ensure that dependencies required to run your script are included
 (e.g. requests)
 
--
 
 ## Evaluation rubric
 
