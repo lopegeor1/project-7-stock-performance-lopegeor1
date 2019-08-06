@@ -101,3 +101,22 @@ def test_update_portfolio():
                  'gain_loss': -94.355, 'change': -0.188}]
 
     assert update_portfolio(api_data, csv_target) == expected
+
+def test_write_portfolio(write_csv):
+    """
+    Given that the write_portfolio is called, assert that
+    the data the expected data is returned.
+    """
+    data = [{'symbol': 'NFLX', 'units': 3, 'cost': 99.66, 'latest_price': 319,
+             'book_value': 998.1, 'market_value': 957, 'gain_loss': -41.1, 'change': -0.041}]
+    portfolio_report.write_portfolio(data, filename=write_csv)
+
+    first = 'symbol,units,cost,latest_price,book_value,market_value,gain_loss,'
+    second = 'change\r\nNFLX,3,99.66,319,998.1,957,-41.1,-0.041\r\n'
+    expected = '{}{}'.format(first, second)
+
+    with open(write_csv, 'r', newline='') as file:
+        result = file.read()
+        assert result == expected, (
+            f'Expecting the file to contain: \n{result}'
+        )

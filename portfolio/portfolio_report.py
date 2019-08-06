@@ -16,7 +16,8 @@ def main():
     csv_source = read_portfolio(source)
     csv_target = save_portfolio(csv_source, filename)
     api_data = make_api_call(csv_target)
-    update_portfolio(api_data, csv_target)
+    updates = update_portfolio(api_data, csv_target)
+    write_portfolio(updates, filename)
 
 
 def get_args():
@@ -90,6 +91,20 @@ def update_portfolio(api_data, csv_target):
             print("- "+check_symbol+" is an invalid api call, check source file.")
     return updates
 
+
+def write_portfolio(updates, filename):
+    """
+    Write updated csv report to destination file -> write 'updates' to 'filename'
+    """
+    with open(filename, 'w', newline='') as file:
+        writer = csv.DictWriter(file, ['symbol', 'units', 'cost', 'latest_price',
+                                       'book_value', 'market_value', 'gain_loss',
+                                       'change'])
+        writer.writeheader()
+        writer.writerows(updates)
+        print('\nFile is ready at location: ')
+        print(filename)
+        print('\n')
 
 if __name__ == '__main__':
     main()
