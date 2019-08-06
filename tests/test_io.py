@@ -6,6 +6,7 @@ from collections import OrderedDict
 
 from portfolio import portfolio_report
 from portfolio.portfolio_report import make_api_call
+from portfolio.portfolio_report import update_portfolio
 
 
 # Note: the portfolio_csv argument found in the tests below
@@ -85,3 +86,18 @@ def test_make_api_call(requests_mock):
                 {'symbol': 'PEP', 'units': '11', 'cost': '131.53'}
                 ]
     assert make_api_call(my_stocks) == expected
+
+def test_update_portfolio():
+    """
+    Given that the update_portfolio method is called with the following
+    data, assert that a dataset is updated in the expected format.
+    """
+    api_data = [('ABEO', 2.435, 100, 1564775954263)]
+
+    csv_target = [{'symbol': 'ABEO', 'units': '167', 'cost': '3.0'}]
+
+    expected = [{'symbol': 'ABEO', 'latest_price': 2.435, 'units': 167,
+                 'cost': 3.0, 'book_value': 501.0, 'market_value': 406.645,
+                 'gain_loss': -94.355, 'change': -0.188}]
+
+    assert update_portfolio(api_data, csv_target) == expected
