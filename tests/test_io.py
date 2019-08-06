@@ -3,6 +3,7 @@ Tests I/O disk operations.
 """
 from collections import OrderedDict
 
+
 from portfolio import portfolio_report
 
 
