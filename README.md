@@ -162,3 +162,10 @@ application. Ensure that dependencies required to run your script are included
 | Packaging & delivery | The project is properly packaged, documented and can be installed using pip. | The project is packaged, but is missing certain metadata |  The project is installable, but with some issues. Documentation is incomplete.| Documentation is partial, the package does not install | No packaging present, little or no documentation
 | Reusability | The code could be reused as a whole and each routine could be reused | Most of the code could be reused in other programs | Some parts of the code could be reused in other programs | A few parts of the code could be reused in other programs | The code is not organized for reusability
 | Readability | The code is well organized and very easy to understand | The code is pretty well organized and fairly easy to read | The code has some organization, is a challenge to read | The code is readable only by someone who knows what it is supposed to do | The code is poorly organized and very difficult to read
+
+# Instructions (simple)
+# Make sure to run the portfolio_report.py file from the portfolio/ directory and not the project root directory.
+# Make sure to include apostrophe marks -> '' around the file name argument but not the source file (portfolio.csv)
+# argument.  The package (virtual installable test version) can be found here:
+# https://test.pypi.org/project/example-pkg-lopegeor1/
+# Make sure the target file is closed before running the script, or permission will be denied and it will not run.

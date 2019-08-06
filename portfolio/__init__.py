@@ -1,2 +1,2 @@
-"""__init__ filename"""
+"""__init__.py file"""
 NAME = "MyStockPortfolio_pkg"

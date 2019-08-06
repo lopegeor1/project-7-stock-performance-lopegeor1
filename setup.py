@@ -8,7 +8,7 @@ setuptools.setup(
     name="example-pkg-lopegeor1",
     version="0.0.1",
     author="George Lopez",
-    author_email="author@example.com",
+    author_email="gl_email@yahoo.class",
     description="A small example package",
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
