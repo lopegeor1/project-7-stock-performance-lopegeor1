@@ -11,7 +11,7 @@ def main():
     Entrypoint into program.
     """
     args = get_args()
-    source = args.source
+    source = '../{0}'.format(args.source)
     filename = '{0}/report1.csv'.format(args.filename)
     csv_source = read_portfolio(source)
     csv_target = save_portfolio(csv_source, filename)
